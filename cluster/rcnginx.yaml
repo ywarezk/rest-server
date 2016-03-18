@@ -1,0 +1,31 @@
+kind: Service
+apiVersion: v1
+metadata: 
+  name: restnginx-service
+spec: 
+  selector: 
+    name: restnginx
+  ports: 
+    - port: 80
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+ labels:
+   name: restnginx
+ name: restnginx
+spec:
+ replicas: 6
+ selector:
+   name: restnginx
+ template:
+   metadata:
+     labels:
+       name: restnginx
+   spec:
+     containers:
+     - image: quay.io/ywarezk/restnginx:latest
+       name: restnginx
+       ports:
+         - containerPort: 3000
